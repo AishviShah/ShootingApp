@@ -19,6 +19,8 @@ enum BoxBodyType : Int
 class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDelegate
 {
     @IBOutlet var sceneView: ARSCNView!
+    var lastContactNode :SCNNode!
+    
     
     override func viewDidLoad()
     {
@@ -72,6 +74,19 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
         {
             contactNode = contact.nodeA
         }
+        if self.lastContactNode != nil && self.lastContactNode == contactNode
+        {
+            return
+        }
+        self.lastContactNode = contactNode
+        
+        let box1 = SCNBox(width: 0.05, height: 0.05, length: 0.05, chamferRadius: 0)
+        
+        let material = SCNMaterial()
+        material.diffuse.contents = UIColor.green
+        box1.materials = [material]
+        
+        self.lastContactNode.geometry?.materials = [material]
     }
     private func registerTapGestureRecognizer()
     {
